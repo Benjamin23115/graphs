@@ -2,28 +2,30 @@
 #include <limits>
 #include <queue>
 #include <unordered_map>
-#include graph_matrix.h
+#include "graph_matrix.h"
+
+using namespace std;
 
 // Function to calculate the shortest path from a given start node
 template <typename TYPE>
-std::unordered_map<TYPE, std::pair<int, TYPE>> calculateShortestPaths(GraphMatrix<TYPE> &graph, TYPE startNode)
+unordered_map<TYPE, pair<int, TYPE>> calculateShortestPaths(GraphMatrix<TYPE> &graph, TYPE startNode)
 {
     int numNodes = graph.getNodeCount();
-    std::unordered_map<TYPE, std::pair<int, TYPE>> shortestPaths;
+    unordered_map<TYPE, pair<int, TYPE>> shortestPaths;
 
     // Initialize distances to all nodes as infinity
-    std::unordered_map<TYPE, int> distances;
+    unordered_map<TYPE, int> distances;
     for (int i = 0; i < numNodes; ++i)
     {
         TYPE node = graph.getNodeAtIndex(i);
-        distances[node] = std::numeric_limits<int>::max();
+        distances[node] = numeric_limits<int>::max();
     }
 
     // Set distance to the start node as 0
     distances[startNode] = 0;
 
     // Priority queue to store nodes with their distances
-    std::priority_queue<std::pair<int, TYPE>, std::vector<std::pair<int, TYPE>>, std::greater<std::pair<int, TYPE>>> pq;
+    priority_queue<pair<int, TYPE>, vector<pair<int, TYPE>>, greater<pair<int, TYPE>>> pq;
     pq.push({0, startNode});
 
     while (!pq.empty())
@@ -72,7 +74,7 @@ void printShortestPaths(GraphMatrix<TYPE> &graph, TYPE startNode)
 int main()
 {
     // Read graph from file
-    std::ifstream inputFile("graph.txt");
+    ifstream inputFile("graph.txt");
     if (!inputFile.is_open())
     {
         cout << "Error opening file." << endl;
