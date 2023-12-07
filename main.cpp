@@ -8,24 +8,24 @@ using namespace std;
 
 // Function to calculate the shortest path from a given start node
 template <typename TYPE>
-unordered_map<TYPE, pair<int, TYPE>> calculateShortestPaths(GraphMatrix<TYPE> &graph, TYPE startNode)
+std::unordered_map<TYPE, std::pair<int, TYPE>> calculateShortestPaths(GraphMatrix<TYPE> &graph, TYPE startNode)
 {
     int numNodes = graph.getNodeCount();
-    unordered_map<TYPE, pair<int, TYPE>> shortestPaths;
+    std::unordered_map<TYPE, std::pair<int, TYPE>> shortestPaths;
 
     // Initialize distances to all nodes as infinity
-    unordered_map<TYPE, int> distances;
+    std::unordered_map<TYPE, int> distances;
     for (int i = 0; i < numNodes; ++i)
     {
         TYPE node = graph.getNodeAtIndex(i);
-        distances[node] = numeric_limits<int>::max();
+        distances[node] = std::numeric_limits<int>::max();
     }
 
     // Set distance to the start node as 0
     distances[startNode] = 0;
 
     // Priority queue to store nodes with their distances
-    priority_queue<pair<int, TYPE>, vector<pair<int, TYPE>>, greater<pair<int, TYPE>>> pq;
+    std::priority_queue<std::pair<int, TYPE>, std::vector<std::pair<int, TYPE>>, std::greater<std::pair<int, TYPE>>> pq;
     pq.push({0, startNode});
 
     while (!pq.empty())
@@ -50,6 +50,12 @@ unordered_map<TYPE, pair<int, TYPE>> calculateShortestPaths(GraphMatrix<TYPE> &g
         }
     }
 
+    // Handle the case where the starting node is not connected to any other nodes
+    if (shortestPaths.find(startNode) == shortestPaths.end())
+    {
+        shortestPaths[startNode] = {0, startNode};
+    }
+
     return shortestPaths;
 }
 
@@ -66,7 +72,12 @@ void printShortestPaths(GraphMatrix<TYPE> &graph, TYPE startNode)
         TYPE previousNode = entry.second.second;
 
         // Print the shortest path to the current node
-        cout << node << ": " << distance << "(" << previousNode << "), ";
+        cout << node << ": " << distance;
+        if (node != startNode)
+        {
+            cout << "(" << previousNode << ")";
+        }
+        cout << ", ";
     }
     cout << endl;
 }
